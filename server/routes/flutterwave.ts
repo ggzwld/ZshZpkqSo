@@ -3,6 +3,12 @@ import type { Request, RequestHandler } from "express";
 const flutterwaveBaseUrl = "https://api.flutterwave.com/v3";
 const flutterwaveReturnPath = "/checkout/flutterwave-return";
 
+export class FlutterwaveRequestError extends Error {
+  constructor(message: string, readonly status = 400) {
+    super(message);
+  }
+}
+
 const getFlutterwaveReturnUrl = () => {
   const returnUrl =
     process.env.NODE_ENV === "production"
@@ -229,23 +235,27 @@ const confirmPayment = async (
   return { order, paymentStatus: "paid" as const };
 };
 
-export const createFlutterwaveHostedSession: RequestHandler = async (req, res) => {
+type FlutterwaveHostedSessionInput = {
+  orderId?: string;
+  paymentAmount?: number;
+  paymentCurrency?: string | null;
+};
+
+export const prepareFlutterwaveHostedSession = async (
+  { orderId, paymentAmount, paymentCurrency }: FlutterwaveHostedSessionInput,
+  authorization?: string,
+) => {
   let txRef: string | undefined;
 
   try {
-    const { orderId, paymentAmount, paymentCurrency } = req.body as {
-      orderId?: string;
-      paymentAmount?: number;
-      paymentCurrency?: string | null;
-    };
-    if (!orderId) return res.status(400).json({ error: "Order ID is required" });
+    if (!orderId) throw new Error("Order ID is required");
     if (!Number.isFinite(paymentAmount) || paymentAmount <= 0 || !paymentCurrency) {
-      return res.status(400).json({ error: "Checkout amount is invalid" });
+      throw new Error("Checkout amount is invalid");
     }
 
-    const order = await getAuthenticatedOrder(orderId, req.headers.authorization);
+    const order = await getAuthenticatedOrder(orderId, authorization);
     if (order.payment_status === "paid") {
-      return res.status(409).json({ error: "This order has already been paid" });
+      throw new FlutterwaveRequestError("This order has already been paid", 409);
     }
 
     const { secretKey } = getConfiguration();
@@ -310,11 +320,11 @@ export const createFlutterwaveHostedSession: RequestHandler = async (req, res) =
       payment_status: "pending",
     });
 
-    return res.json({
+    return {
       paymentUrl: payload.data.link,
       txRef,
       orderId: order.id,
-    });
+    };
   } catch (error) {
     if (txRef) {
       await updatePaymentAttemptAsService(txRef, {
@@ -322,8 +332,20 @@ export const createFlutterwaveHostedSession: RequestHandler = async (req, res) =
         failure_reason: error instanceof Error ? error.message : "Unable to prepare payment",
       }).catch((attemptError) => console.error("Unable to record failed payment attempt", attemptError));
     }
+    throw error;
+  }
+};
+
+export const createFlutterwaveHostedSession: RequestHandler = async (req, res) => {
+  try {
+    const paymentSession = await prepareFlutterwaveHostedSession(
+      req.body as FlutterwaveHostedSessionInput,
+      req.headers.authorization,
+    );
+    return res.json(paymentSession);
+  } catch (error) {
     console.error("Flutterwave hosted session error", error);
-    return res.status(400).json({
+    return res.status(error instanceof FlutterwaveRequestError ? error.status : 400).json({
       error: error instanceof Error ? error.message : "Unable to prepare payment",
     });
   }
