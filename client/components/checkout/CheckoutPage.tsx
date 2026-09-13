@@ -232,8 +232,8 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
         },
         body: JSON.stringify({
           orderId: id,
-          expectedAmount: getFinalTotal(),
-          expectedCurrency: getCurrency(),
+          paymentAmount: getFinalTotal(),
+          paymentCurrency: getCurrency(),
         }),
         signal: controller.signal,
       });

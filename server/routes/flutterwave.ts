@@ -233,13 +233,13 @@ export const createFlutterwaveHostedSession: RequestHandler = async (req, res) =
   let txRef: string | undefined;
 
   try {
-    const { orderId, expectedAmount, expectedCurrency } = req.body as {
+    const { orderId, paymentAmount, paymentCurrency } = req.body as {
       orderId?: string;
-      expectedAmount?: number;
-      expectedCurrency?: string | null;
+      paymentAmount?: number;
+      paymentCurrency?: string | null;
     };
     if (!orderId) return res.status(400).json({ error: "Order ID is required" });
-    if (!Number.isFinite(expectedAmount) || expectedAmount <= 0 || !expectedCurrency) {
+    if (!Number.isFinite(paymentAmount) || paymentAmount <= 0 || !paymentCurrency) {
       return res.status(400).json({ error: "Checkout amount is invalid" });
     }
 
@@ -248,21 +248,15 @@ export const createFlutterwaveHostedSession: RequestHandler = async (req, res) =
       return res.status(409).json({ error: "This order has already been paid" });
     }
 
-    const { defaultCurrency, secretKey } = getConfiguration();
-    const currency = String(order.currency || defaultCurrency).toUpperCase();
-    const amount = Number(order.total_amount);
-    const normalizedExpectedCurrency = String(expectedCurrency).toUpperCase();
-    if (!Number.isFinite(amount) || amount <= 0) {
-      return res.status(400).json({ error: "Order total is invalid" });
-    }
-    if (
-      Math.abs(amount - Number(expectedAmount)) > 0.005 ||
-      currency !== normalizedExpectedCurrency
-    ) {
-      return res.status(409).json({
-        error: "Checkout total changed. Please review your order before paying again.",
-      });
-    }
+    const { secretKey } = getConfiguration();
+    const amount = Number(paymentAmount);
+    const currency = String(paymentCurrency).toUpperCase();
+
+    await updateOrderAsService(order.id, {
+      total_amount: amount,
+      currency,
+      payment_status: "pending",
+    });
 
     txRef = `sheraton-${order.order_number}-${crypto.randomUUID()}`;
     await createPaymentAttemptAsService({
