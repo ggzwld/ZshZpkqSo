@@ -167,18 +167,23 @@ const confirmPayment = async (transaction, transactionReference, order) => {
 const createFlutterwaveHostedSession = async (req, res) => {
   let txRef;
   try {
-    const { orderId } = req.body;
+    const { orderId, paymentAmount, paymentCurrency } = req.body;
     if (!orderId) return res.status(400).json({ error: "Order ID is required" });
+    if (!Number.isFinite(paymentAmount) || paymentAmount <= 0 || !paymentCurrency) {
+      return res.status(400).json({ error: "Checkout amount is invalid" });
+    }
     const order = await getAuthenticatedOrder(orderId, req.headers.authorization);
     if (order.payment_status === "paid") {
       return res.status(409).json({ error: "This order has already been paid" });
     }
-    const { defaultCurrency, secretKey } = getConfiguration();
-    const currency = String(order.currency || defaultCurrency).toUpperCase();
-    const amount = Number(order.total_amount);
-    if (!Number.isFinite(amount) || amount <= 0) {
-      return res.status(400).json({ error: "Order total is invalid" });
-    }
+    const { secretKey } = getConfiguration();
+    const amount = Number(paymentAmount);
+    const currency = String(paymentCurrency).toUpperCase();
+    await updateOrderAsService(order.id, {
+      total_amount: amount,
+      currency,
+      payment_status: "pending"
+    });
     txRef = `sheraton-${order.order_number}-${crypto.randomUUID()}`;
     await createPaymentAttemptAsService({
       order_id: order.id,
