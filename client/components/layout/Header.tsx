@@ -362,8 +362,8 @@ const Header = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 max-w-screen-2xl items-center">
+    <header className="sticky top-0 z-50 w-full min-w-0 overflow-x-clip border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="container mx-auto flex h-16 min-w-0 max-w-screen-xl items-center px-4">
         <div className="mr-4 hidden md:flex">
           <Link to="/" className="mr-6 flex items-center space-x-2">
             <Crown className="h-8 w-8 text-sheraton-gold" />
@@ -453,7 +453,7 @@ const Header = () => {
               <span className="sr-only">Toggle Menu</span>
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="pr-0">
+          <SheetContent side="left" className="w-[min(20rem,calc(100vw-1rem))] max-w-[calc(100vw-1rem)] pr-0">
             <Link
               to="/"
               className="flex items-center space-x-2"
@@ -469,7 +469,7 @@ const Header = () => {
                 </span>
               </div>
             </Link>
-            <nav className="flex flex-col space-y-3 mt-6">
+            <nav className="mt-6 flex min-w-0 flex-col gap-3">
               {[...guestNavItems, ...staffNavItems]
                 .flatMap((section) => section.items)
                 .filter((item) => item.title !== "Menu Management" || canManageMenu)
@@ -491,8 +491,8 @@ const Header = () => {
           </SheetContent>
         </Sheet>
 
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <nav className="flex items-center space-x-2">
+        <div className="flex min-w-0 flex-1 items-center justify-end gap-1 md:gap-2">
+          <nav className="flex min-w-0 items-center gap-1 md:gap-2">
             {/* Notification Bell */}
             <Popover open={isNotificationsOpen} onOpenChange={setIsNotificationsOpen}>
               <PopoverTrigger asChild>
@@ -587,12 +587,6 @@ const Header = () => {
               </PopoverContent>
             </Popover>
 
-            <Link to="/staff">
-              <Button variant="ghost" size="sm" className="text-xs">
-                <Briefcase className="h-4 w-4 mr-1" />
-                Staff Portal
-              </Button>
-            </Link>
             {canManageMenu && (
               <Link to="/staff/menu">
                 <Button variant="ghost" size="sm" className="text-xs">
@@ -623,15 +617,24 @@ const Header = () => {
                   </Badge>
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-52" align="end">
-                <div className="space-y-2">
+              <PopoverContent className="w-[min(13rem,calc(100vw-1rem))]" align="end">
+                <div className="flex flex-col gap-1">
                   <Link
                     to="/profile"
-                    className="block rounded-md px-3 py-2 text-sm hover:bg-accent"
+                    className="rounded-md px-3 py-2 text-sm hover:bg-accent"
                     onClick={() => setIsAccountOpen(false)}
                   >
                     My Account
                   </Link>
+                  <Link
+                    to="/staff"
+                    className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-accent"
+                    onClick={() => setIsAccountOpen(false)}
+                  >
+                    <Briefcase className="h-4 w-4 text-sheraton-gold" />
+                    Staff Portal
+                  </Link>
+                  <div className="my-1 border-t border-border" />
                   <Button
                     variant="ghost"
                     className="w-full justify-start px-3 text-sm"
