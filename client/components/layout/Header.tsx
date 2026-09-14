@@ -364,7 +364,7 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 w-full min-w-0 overflow-x-clip border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 min-w-0 max-w-screen-xl items-center px-4">
-        <div className="mr-4 hidden md:flex">
+        <div className="mr-4 hidden lg:flex">
           <Link to="/" className="mr-6 flex items-center space-x-2">
             <Crown className="h-8 w-8 text-sheraton-gold" />
             <div className="flex flex-col">
@@ -447,7 +447,7 @@ const Header = () => {
           <SheetTrigger asChild>
             <Button
               variant="ghost"
-              className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+              className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
             >
               <Menu className="h-6 w-6" />
               <span className="sr-only">Toggle Menu</span>
@@ -491,8 +491,8 @@ const Header = () => {
           </SheetContent>
         </Sheet>
 
-        <div className="flex min-w-0 flex-1 items-center justify-end gap-1 md:gap-2">
-          <nav className="flex min-w-0 items-center gap-1 md:gap-2">
+        <div className="flex min-w-0 flex-1 items-center justify-end gap-1 lg:gap-2">
+          <nav className="flex min-w-0 items-center gap-1 lg:gap-2">
             {/* Notification Bell */}
             <Popover open={isNotificationsOpen} onOpenChange={setIsNotificationsOpen}>
               <PopoverTrigger asChild>
@@ -597,7 +597,8 @@ const Header = () => {
             )}
             <Link to="/register">
               <Button variant="ghost" size="sm" className="text-xs">
-                Join Special
+                  Join
+
               </Button>
             </Link>
             <Popover open={isAccountOpen} onOpenChange={setIsAccountOpen}>
@@ -608,7 +609,7 @@ const Header = () => {
                   className="sheraton-gradient text-white border-0"
                 >
                   <User className="h-4 w-4 mr-1" />
-                  <span className="hidden sm:inline">My Account</span>
+                  <span className="hidden sm:inline">Profile</span>
                   <Badge
                     variant="secondary"
                     className="ml-2 bg-white/20 text-white"
