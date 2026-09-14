@@ -262,7 +262,7 @@ const GuestComplaintForm: React.FC<GuestComplaintFormProps> = ({
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="border-orange-200 text-orange-600 hover:bg-orange-50"
+          className="w-full self-stretch border-orange-200 text-orange-600 hover:bg-orange-50 sm:w-auto sm:self-auto"
         >
           <AlertCircle className="h-4 w-4 mr-2" />
           {triggerButtonText}

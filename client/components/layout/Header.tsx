@@ -35,6 +35,7 @@ import {
   CreditCard,
   AlertCircle,
   CheckCircle2,
+  UserPlus,
 } from "lucide-react";
 import { cn } from "../../lib/utils";
 import { supabase, Notification } from "../../lib/supabase";
@@ -597,8 +598,8 @@ const Header = () => {
             )}
             <Link to="/register">
               <Button variant="ghost" size="sm" className="text-xs">
-                  Join
-
+                <UserPlus className="mr-1 h-4 w-4" />
+                <span>Join</span>
               </Button>
             </Link>
             <Popover open={isAccountOpen} onOpenChange={setIsAccountOpen}>
@@ -606,13 +607,13 @@ const Header = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="sheraton-gradient text-white border-0"
+                  className="sheraton-gradient border-0 px-2 text-white sm:px-3"
                 >
-                  <User className="h-4 w-4 mr-1" />
+                  <User className="mr-1 h-4 w-4" />
                   <span className="hidden sm:inline">Profile</span>
                   <Badge
                     variant="secondary"
-                    className="ml-2 bg-white/20 text-white"
+                    className="ml-1 hidden bg-white/20 text-white sm:inline-flex sm:ml-2"
                   >
                     1,250 pts
                   </Badge>

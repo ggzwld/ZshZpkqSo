@@ -155,42 +155,42 @@ const HomePage = ({ displayName = "Special Guest" }: HomePageProps) => {
       {/* Hero Section */}
       <section className="relative overflow-hidden sheraton-hero-gradient">
         <div className="absolute inset-0 bg-black/20" />
-        <div className="relative container py-24 lg:py-32">
-          <div className="max-w-4xl mx-auto text-center text-white">
-            <div className="flex items-center justify-center mb-6">
-              <Crown className="h-12 w-12 text-sheraton-gold mr-4" />
-              <Badge className="bg-sheraton-gold text-sheraton-navy text-lg px-4 py-2">
+        <div className="relative container w-full max-w-full px-4 py-16 sm:py-24 lg:py-32">
+          <div className="mx-auto w-full max-w-4xl text-center text-white">
+            <div className="mb-6 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-0">
+              <Crown className="h-10 w-10 text-sheraton-gold sm:mr-4 sm:h-12 sm:w-12" />
+              <Badge className="bg-sheraton-gold px-4 py-2 text-base text-sheraton-navy sm:text-lg">
                 You Are Special
               </Badge>
             </div>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+            <h1 className="mb-6 text-4xl font-bold leading-tight sm:text-5xl md:text-6xl lg:text-7xl">
               {getGreeting()},
               <br />
               <span className="text-shimmer">{displayName}</span>
             </h1>
 
-            <p className="text-xl md:text-2xl mb-8 text-white/90 leading-relaxed">
+            <p className="mb-8 text-lg leading-relaxed text-white/90 sm:text-xl md:text-2xl">
               Welcome to Sheraton Special - where technology meets hospitality
               to create extraordinary moments that make you feel truly special,
               every single time.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Link to="/book">
+            <div className="mb-12 flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:items-center">
+              <Link to="/book" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="sheraton-gradient text-white px-8 py-6 text-lg font-semibold luxury-shadow hover:scale-105 transition-transform"
+                  className="w-full px-4 py-6 text-base font-semibold luxury-shadow transition-transform hover:scale-105 sm:px-8 sm:text-lg"
                 >
                   <Hotel className="mr-2 h-5 w-5" />
                   Book Your Special Stay
                 </Button>
               </Link>
-              <Link to="/menu">
+              <Link to="/menu" className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="glass-effect border-white/30 text-white hover:bg-white/10 px-8 py-6 text-lg"
+                  className="w-full px-4 py-6 text-base sm:px-8 sm:text-lg glass-effect border-white/30 text-white hover:bg-white/10"
                 >
                   <QrCode className="mr-2 h-5 w-5" />
                   Quick Menu Access
@@ -417,9 +417,9 @@ const HomePage = ({ displayName = "Special Guest" }: HomePageProps) => {
 
       {/* Guest Services Support Section */}
       <section className="py-12 bg-orange-50 border-t border-orange-200">
-        <div className="container">
-          <div className="flex items-center justify-between">
-            <div>
+        <div className="container w-full max-w-full px-4">
+          <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
               <h3 className="text-2xl font-bold text-sheraton-navy mb-2">
                 Experience an Issue?
               </h3>
@@ -435,8 +435,8 @@ const HomePage = ({ displayName = "Special Guest" }: HomePageProps) => {
       {/* Call to Action */}
       <section className="py-20 sheraton-gradient">
         <div className="container text-center">
-          <div className="max-w-3xl mx-auto text-white">
-            <Crown className="h-16 w-16 mx-auto mb-6 text-white" />
+          <div className="mx-auto w-full max-w-3xl text-white">
+            <Crown className="mx-auto mb-6 h-16 w-16 text-white" />
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Ready to Feel Special?
             </h2>
@@ -445,21 +445,21 @@ const HomePage = ({ displayName = "Special Guest" }: HomePageProps) => {
               stay an extraordinary experience. Your journey to feeling truly
               special starts now.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/profile">
+            <div className="flex flex-col justify-center gap-4 sm:flex-row">
+              <Link to="/profile" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="bg-white text-sheraton-navy hover:bg-white/90 px-8 py-6 text-lg font-semibold"
+                  className="w-full px-4 py-6 text-base font-semibold sm:px-8 sm:text-lg bg-white text-sheraton-navy hover:bg-white/90"
                 >
                   <Crown className="mr-2 h-5 w-5" />
                   Create Your Special Account
                 </Button>
               </Link>
-              <Link to="/book">
+              <Link to="/book" className="w-full sm:w-auto">
                 <Button
                   size="lg"
                   variant="outline"
-                  className="border-white text-white hover:bg-white/10 px-8 py-6 text-lg"
+                  className="w-full px-4 py-6 text-base sm:px-8 sm:text-lg border-white text-white hover:bg-white/10"
                 >
                   <Hotel className="mr-2 h-5 w-5" />
                   Book Now
